@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TimeAge - Time & Age Calculators</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff;
+            color: #333333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles - Reduced Height */
+        header {
+            background: #ffffff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 15px 0;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            flex-shrink: 0;
+        }
+
+        .logo h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .logo .time {
+            color: #000000;
+        }
+
+        .logo .age {
+            color: #666666;
+        }
+
+        .logo .tagline {
+            color: #888888;
+            font-size: 0.9rem;
+            margin-top: 2px;
+            font-weight: 400;
+        }
+
+        /* Navigation - Moved to top */
+        .nav-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            justify-content: flex-end;
+        }
+
+        .nav-item {
+            padding: 8px 16px;
+            background: #ffffff;
+            border: 2px solid #e9ecef;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            color: #555555;
+            text-decoration: none;
+            font-size: 0.85rem;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: #001f3f;
+            color: #ffffff;
+            border-color: #001f3f;
+        }
+
+        /* Main Content - Reduced padding */
+        main {
+            padding: 25px 0;
+            min-height: calc(100vh - 150px);
+        }
+
+        .tool-section {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .tool-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .tool-title {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .tool-title h2 {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+            color: #001f3f;
+            font-weight: 700;
+        }
+
+        .tool-title p {
+            color: #666666;
+            font-size: 1rem;
+            font-weight: 400;
+        }
+
+        /* Calculator Styles - Reduced padding */
+        .calculator {
+            max-width: 500px;
+            margin: 0 auto;
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .input-group {
+            margin-bottom: 18px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #444444;
+            font-size: 0.9rem;
+        }
+
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 12px 14px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .input-group input:focus, .input-group select:focus {
+            outline: none;
+            border-color: #001f3f;
+            box-shadow: 0 0 0 3px rgba(0, 31, 63, 0.1);
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+        }
+
+        .checkbox-group label {
+            margin-bottom: 0;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .calculate-btn {
+            width: 100%;
+            padding: 14px;
+            background: #001f3f;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .calculate-btn:hover {
+            background: #003366;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 10px;
+            border-left: 4px solid #001f3f;
+            display: none;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+
+        .result.active {
+            display: block;
+            animation: slideIn 0.4s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result h3 {
+            color: #001f3f;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .result p {
+            font-size: 1.1rem;
+            color: #333333;
+            font-weight: 500;
+            line-height: 1.6;
+        }
+
+        /* Footer - Reduced padding */
+        footer {
+            background: #f8f9fa;
+            padding: 25px 0;
+            text-align: center;
+            border-top: 1px solid #e9ecef;
+            margin-top: 40px;
+        }
+
+        .footer-content {
+            color: #666666;
+            line-height: 1.6;
+            font-size: 0.9rem;
+        }
+
+        .footer-content p:first-child {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .logo h1 {
+                font-size: 2rem;
+            }
+
+            .nav-container {
+                justify-content: center;
+            }
+
+            .nav-item {
+                padding: 6px 12px;
+                font-size: 0.8rem;
+            }
+
+            .calculator {
+                padding: 20px;
+                margin: 0 10px;
+            }
+
+            .tool-title h2 {
+                font-size: 1.5rem;
+            }
+
+            .tool-title p {
+                font-size: 0.95rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo h1 {
+                font-size: 1.8rem;
+            }
+
+            .logo .tagline {
+                font-size: 0.85rem;
+            }
+
+            .nav-item {
+                padding: 5px 10px;
+                font-size: 0.75rem;
+            }
+
+            .calculator {
+                padding: 15px;
+            }
+
+            .tool-title h2 {
+                font-size: 1.4rem;
+            }
+
+            .tool-title p {
+                font-size: 0.9rem;
+            }
+
+            .result {
+                padding: 15px;
+            }
+
+            .result p {
+                font-size: 1rem;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .logo h1 {
+                font-size: 1.6rem;
+            }
+
+            .nav-container {
+                gap: 4px;
+            }
+
+            .nav-item {
+                padding: 4px 8px;
+                font-size: 0.7rem;
+            }
+
+            .calculator {
+                padding: 12px;
+            }
+        }
+
+        /* Time Zone specific styles */
+        .time-display {
+            font-family: 'Courier New', monospace;
+            background: #f8f9fa;
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid #e9ecef;
+            margin: 8px 0;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <h1><span class="time">Time</span><span class="age">Age</span></h1>
+                    <div class="tagline">Smart Time & Age Calculators</div>
+                </div>
+                <div class="nav-container">
+                    <a href="#" class="nav-item active" data-tool="age-calculator">Age Calculator</a>
+                    <a href="#" class="nav-item" data-tool="age-difference">Age Difference</a>
+                    <a href="#" class="nav-item" data-tool="time-between">Time Between</a>
+                    <a href="#" class="nav-item" data-tool="countdown">Countdown</a>
+                    <a href="#" class="nav-item" data-tool="date-calculator">Add/Subtract Time</a>
+                    <a href="#" class="nav-item" data-tool="timezone-converter">Time Zone Converter</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <!-- Age Calculator -->
+            <section id="age-calculator" class="tool-section active">
+                <div class="tool-title">
+                    <h2>Age Calculator</h2>
+                    <p>Calculate your exact age in years, months, and days</p>
+                </div>
+                <div class="calculator">
+                    <div class="input-group">
+                        <label for="birth-date">Birth Date:</label>
+                        <input type="date" id="birth-date" max="">
+                    </div>
+                    <div class="input-group">
+                        <label for="age-at-date">Age at Date (Optional):</label>
+                        <input type="date" id="age-at-date">
+                    </div>
+                    <button class="calculate-btn" onclick="calculateAge()">Calculate Age</button>
+                    <div id="age-result" class="result">
+                        <h3>Your Age:</h3>
+                        <p id="age-output"></p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Age Difference Calculator -->
+            <section id="age-difference" class="tool-section">
+                <div class="tool-title">
+                    <h2>Age Difference Calculator</h2>
+                    <p>Calculate the age difference between two people</p>
+                </div>
+                <div class="calculator">
+                    <div class="input-group">
+                        <label for="person1-dob">Person 1 Date of Birth:</label>
+                        <input type="date" id="person1-dob">
+                    </div>
+                    <div class="input-group">
+                        <label for="person2-dob">Person 2 Date of Birth:</label>
+                        <input type="date" id="person2-dob">
+                    </div>
+                    <button class="calculate-btn" onclick="calculateAgeDifference()">Calculate Difference</button>
+                    <div id="difference-result" class="result">
+                        <h3>Age Difference:</h3>
+                        <p id="difference-output"></p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Time Between Dates -->
+            <section id="time-between" class="tool-section">
+                <div class="tool-title">
+                    <h2>Time Between Dates</h2>
+                    <p>Calculate days, months, and years between two dates</p>
+                </div>
+                <div class="calculator">
+                    <div class="input-group">
+                        <label for="start-date">Start Date:</label>
+                        <input type="date" id="start-date">
+                    </div>
+                    <div class="input-group">
+                        <label for="end-date">End Date:</label>
+                        <input type="date" id="end-date">
+                    </div>
+                    <button class="calculate-btn" onclick="calculateDateBetween()">Calculate Duration</button>
+                    <div id="duration-result" class="result">
+                        <h3>Time Between Dates:</h3>
+                        <p id="duration-output"></p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Countdown Timer -->
+            <section id="countdown" class="tool-section">
+                <div class="tool-title">
+                    <h2>Countdown Timer</h2>
+                    <p>Count down to any future date and time</p>
+                </div>
+                <div class="calculator">
+                    <div class="input-group">
+                        <label for="countdown-date">Target Date:</label>
+                        <input type="date" id="countdown-date">
+                    </div>
+                    <div class="input-group">
+                        <label for="countdown-time">Target Time:</label>
+                        <input type="time" id="countdown-time">
+                    </div>
+                    <button class="calculate-btn" onclick="startCountdown()">Start Countdown</button>
+                    <div id="countdown-result" class="result">
+                        <h3>Time Remaining:</h3>
+                        <p id="countdown-output"></p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Add/Subtract Time Calculator -->
+            <section id="date-calculator" class="tool-section">
+                <div class="tool-title">
+                    <h2>Add/Subtract Time</h2>
+                    <p>Calculate dates by adding or subtracting time</p>
+                </div>
+                <div class="calculator">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="use-today" checked onchange="toggleStartDate()">
+                        <label for="use-today">Calculate from today</label>
+                    </div>
+                    <div class="input-group" id="custom-date-group" style="display: none;">
+                        <label for="base-date">Start Date:</label>
+                        <input type="date" id="base-date">
+                    </div>
+                    <div class="input-group">
+                        <label for="add-subtract">Operation:</label>
+                        <select id="add-subtract">
+                            <option value="add">Add</option>
+                            <option value="subtract">Subtract</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="quantity">Quantity:</label>
+                        <input type="number" id="quantity" min="1" value="1">
+                    </div>
+                    <div class="input-group">
+                        <label for="time-unit">Unit:</label>
+                        <select id="time-unit">
+                            <option value="days">Days</option>
+                            <option value="weeks">Weeks</option>
+                            <option value="months">Months</option>
+                            <option value="years">Years</option>
+                        </select>
+                    </div>
+                    <button class="calculate-btn" onclick="calculateNewDate()">Calculate New Date</button>
+                    <div id="date-result" class="result">
+                        <h3>Result Date:</h3>
+                        <p id="date-output"></p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Time Zone Converter -->
+            <section id="timezone-converter" class="tool-section">
+                <div class="tool-title">
+                    <h2>Time Zone Converter</h2>
+                    <p>Convert time between different time zones</p>
+                </div>
+                <div class="calculator">
+                    <div class="input-group">
+                        <label for="from-timezone">From Time Zone:</label>
+                        <select id="from-timezone">
+                            <option value="auto">Auto-detect (Your Time Zone)</option>
+                            <option value="EST">Eastern Time (EST)</option>
+                            <option value="PST">Pacific Time (PST)</option>
+                            <option value="CST">Central Time (CST)</option>
+                            <option value="MST">Mountain Time (MST)</option>
+                            <option value="GMT">Greenwich Mean Time (GMT)</option>
+                            <option value="CET">Central European Time (CET)</option>
+                            <option value="IST">India Standard Time (IST)</option>
+                            <option value="JST">Japan Standard Time (JST)</option>
+                            <option value="AEST">Australian Eastern Time (AEST)</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="from-datetime">Date & Time:</label>
+                        <input type="datetime-local" id="from-datetime">
+                    </div>
+                    <div class="input-group">
+                        <label for="to-timezone">To Time Zone:</label>
+                        <select id="to-timezone">
+                            <option value="EST">Eastern Time (EST)</option>
+                            <option value="PST">Pacific Time (PST)</option>
+                            <option value="CST">Central Time (CST)</option>
+                            <option value="MST">Mountain Time (MST)</option>
+                            <option value="GMT">Greenwich Mean Time (GMT)</option>
+                            <option value="CET">Central European Time (CET)</option>
+                            <option value="IST">India Standard Time (IST)</option>
+                            <option value="JST">Japan Standard Time (JST)</option>
+                            <option value="AEST">Australian Eastern Time (AEST)</option>
+                        </select>
+                    </div>
+                    <button class="calculate-btn" onclick="convertTimeZone()">Convert Time</button>
+                    <div id="timezone-result" class="result">
+                        <h3>Converted Time:</h3>
+                        <p id="timezone-output"></p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2024 TimeAge. All rights reserved.</p>
+                <p>Smart time and age calculation tools for everyone.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Set max date for date inputs to today
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date().toISOString().split('T')[0];
+            const now = new Date();
+            const datetimeLocal = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+            
+            // Set max dates
+            document.getElementById('birth-date').max = today;
+            document.getElementById('age-at-date').max = today;
+            document.getElementById('person1-dob').max = today;
+            document.getElementById('person2-dob').max = today;
+            document.getElementById('start-date').max = today;
+            document.getElementById('end-date').max = today;
+            document.getElementById('countdown-date').min = today;
+            
+            // Set current datetime for timezone converter
+            document.getElementById('from-datetime').value = datetimeLocal;
+            
+            // Set base date to today
+            document.getElementById('base-date').value = today;
+        });
+
+        // Navigation between tools
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remove active class from all nav items and sections
+                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                document.querySelectorAll('.tool-section').forEach(section => section.classList.remove('active'));
+                
+                // Add active class to clicked nav item
+                this.classList.add('active');
+                
+                // Show corresponding section
+                const toolId = this.getAttribute('data-tool');
+                document.getElementById(toolId).classList.add('active');
+            });
+        });
+
+        // Toggle start date for Add/Subtract calculator
+        function toggleStartDate() {
+            const useToday = document.getElementById('use-today').checked;
+            const customDateGroup = document.getElementById('custom-date-group');
+            
+            if (useToday) {
+                customDateGroup.style.display = 'none';
+            } else {
+                customDateGroup.style.display = 'block';
+            }
+        }
+
+        // Age Calculator Function
+        function calculateAge() {
+            const birthDate = new Date(document.getElementById('birth-date').value);
+            const ageAtDate = document.getElementById('age-at-date').value 
+                ? new Date(document.getElementById('age-at-date').value)
+                : new Date();
+
+            if (!birthDate.getTime()) {
+                alert('Please enter your birth date');
+                return;
+            }
+
+            let years = ageAtDate.getFullYear() - birthDate.getFullYear();
+            let months = ageAtDate.getMonth() - birthDate.getMonth();
+            let days = ageAtDate.getDate() - birthDate.getDate();
+
+            if (days < 0) {
+                months--;
+                // Get days in previous month
+                const prevMonth = new Date(ageAtDate.getFullYear(), ageAtDate.getMonth(), 0);
+                days += prevMonth.getDate();
+            }
+
+            if (months < 0) {
+                years--;
+                months += 12;
+            }
+
+            const result = `${years} years, ${months} months, ${days} days`;
+            document.getElementById('age-output').textContent = result;
+            document.getElementById('age-result').classList.add('active');
+        }
+
+        // Age Difference Calculator Function
+        function calculateAgeDifference() {
+            const person1 = new Date(document.getElementById('person1-dob').value);
+            const person2 = new Date(document.getElementById('person2-dob').value);
+
+            if (!person1.getTime() || !person2.getTime()) {
+                alert('Please enter both dates of birth');
+                return;
+            }
+
+            const diffMs = Math.abs(person2 - person1);
+            const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+            
+            const years = Math.floor(diffDays / 365);
+            const months = Math.floor((diffDays % 365) / 30);
+            const days = diffDays % 30;
+            const totalMonths = Math.floor(diffDays / 30.44);
+            const totalWeeks = Math.floor(diffDays / 7);
+
+            const result = `${years} years, ${months} months, ${days} days\n` +
+                          `Or ${totalMonths} months, ${days} days\n` +
+                          `Or ${totalWeeks} weeks, ${diffDays % 7} days\n` +
+                          `Or ${diffDays} total days`;
+
+            document.getElementById('difference-output').textContent = result;
+            document.getElementById('difference-result').classList.add('active');
+        }
+
+        // Date Between Calculator Function
+        function calculateDateBetween() {
+            const startDate = new Date(document.getElementById('start-date').value);
+            const endDate = new Date(document.getElementById('end-date').value);
+
+            if (!startDate.getTime() || !endDate.getTime()) {
+                alert('Please enter both start and end dates');
+                return;
+            }
+
+            if (endDate < startDate) {
+                alert('End date must be after start date');
+                return;
+            }
+
+            const diffMs = endDate - startDate;
+            const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+            
+            const years = Math.floor(diffDays / 365);
+            const months = Math.floor((diffDays % 365) / 30);
+            const days = diffDays % 30;
+            const totalMonths = Math.floor(diffDays / 30.44);
+            const totalWeeks = Math.floor(diffDays / 7);
+
+            const result = `${years} years, ${months} months, ${days} days\n` +
+                          `Or ${totalMonths} months, ${days} days\n` +
+                          `Or ${totalWeeks} weeks, ${diffDays % 7} days\n` +
+                          `Or ${diffDays} total days`;
+
+            document.getElementById('duration-output').textContent = result;
+            document.getElementById('duration-result').classList.add('active');
+        }
+
+        // Countdown Timer Function
+        function startCountdown() {
+            const countdownDate = document.getElementById('countdown-date').value;
+            const countdownTime = document.getElementById('countdown-time').value;
+
+            if (!countdownDate) {
+                alert('Please enter a target date');
+                return;
+            }
+
+            const targetDateTime = new Date(countdownDate + 'T' + (countdownTime || '00:00'));
+            const now = new Date();
+
+            if (targetDateTime <= now) {
+                alert('Please select a future date and time');
+                return;
+            }
+
+            document.getElementById('countdown-result').classList.add('active');
+
+            function updateCountdown() {
+                const now = new Date();
+                const diffMs = targetDateTime - now;
+
+                if (diffMs <= 0) {
+                    document.getElementById('countdown-output').textContent = 'Time\'s up!';
+                    clearInterval(window.countdownInterval);
+                    return;
+                }
+
+                const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diffMs % (1000 * 60)) / 1000);
+
+                document.getElementById('countdown-output').textContent = 
+                    `${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds`;
+            }
+
+            updateCountdown();
+            const countdownInterval = setInterval(updateCountdown, 1000);
+
+            // Store interval ID to clear if needed
+            window.countdownInterval = countdownInterval;
+        }
+
+        // Add/Subtract Time Calculator Function
+        function calculateNewDate() {
+            const useToday = document.getElementById('use-today').checked;
+            let baseDate;
+            
+            if (useToday) {
+                baseDate = new Date();
+            } else {
+                baseDate = new Date(document.getElementById('base-date').value);
+            }
+            
+            const operation = document.getElementById('add-subtract').value;
+            const quantity = parseInt(document.getElementById('quantity').value);
+            const unit = document.getElementById('time-unit').value;
+            
+            if (!useToday && !baseDate.getTime()) {
+                alert('Please enter a start date');
+                return;
+            }
+            
+            if (!quantity || quantity < 1) {
+                alert('Please enter a valid quantity');
+                return;
+            }
+            
+            const resultDate = new Date(baseDate);
+            const multiplier = operation === 'add' ? 1 : -1;
+            
+            switch(unit) {
+                case 'days':
+                    resultDate.setDate(resultDate.getDate() + (quantity * multiplier));
+                    break;
+                case 'weeks':
+                    resultDate.setDate(resultDate.getDate() + (quantity * 7 * multiplier));
+                    break;
+                case 'months':
+                    resultDate.setMonth(resultDate.getMonth() + (quantity * multiplier));
+                    break;
+                case 'years':
+                    resultDate.setFullYear(resultDate.getFullYear() + (quantity * multiplier));
+                    break;
+            }
+            
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const resultText = resultDate.toLocaleDateString('en-US', options);
+            
+            document.getElementById('date-output').textContent = resultText;
+            document.getElementById('date-result').classList.add('active');
+        }
+
+        // Time Zone Converter Function
+        function convertTimeZone() {
+            const fromTimezone = document.getElementById('from-timezone').value;
+            const fromDatetime = document.getElementById('from-datetime').value;
+            const toTimezone = document.getElementById('to-timezone').value;
+
+            if (!fromDatetime) {
+                alert('Please enter a date and time');
+                return;
+            }
+
+            // Timezone offsets in hours (simplified for demo)
+            const timezoneOffsets = {
+                'auto': 0, // Will use user's local time
+                'EST': -5,
+                'PST': -8,
+                'CST': -6,
+                'MST': -7,
+                'GMT': 0,
+                'CET': 1,
+                'IST': 5.5,
+                'JST': 9,
+                'AEST': 10
+            };
+
+            const inputDate = new Date(fromDatetime);
+            
+            // Calculate time difference between timezones
+            let fromOffset, toOffset;
+            
+            if (fromTimezone === 'auto') {
+                // Use user's local timezone offset
+                fromOffset = inputDate.getTimezoneOffset() / 60;
+            } else {
+                fromOffset = timezoneOffsets[fromTimezone];
+            }
+            
+            toOffset = timezoneOffsets[toTimezone];
+            
+            // Calculate the time difference in hours
+            const timeDiff = toOffset - fromOffset;
+            
+            // Apply the time difference
+            const resultDate = new Date(inputDate.getTime() + timeDiff * 60 * 60 * 1000);
+            
+            const options = {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                timeZoneName: 'short'
+            };
+            
+            let resultText;
+            
+            if (fromTimezone === 'auto') {
+                resultText = resultDate.toLocaleDateString('en-US', options) + ` (${toTimezone})`;
+            } else {
+                resultText = resultDate.toLocaleDateString('en-US', options) + ` (${toTimezone})`;
+            }
+            
+            document.getElementById('timezone-output').textContent = resultText;
+            document.getElementById('timezone-result').classList.add('active');
+        }
+    </script>
+</body>
+</html>
