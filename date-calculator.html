@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Date Calculator - TimeAged</title>
+    <meta name="description" content="Calculate new dates by adding or subtracting days, weeks, months, or years. Free online date calculator tool.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff;
+            color: #333333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background: #ffffff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 15px 0;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            flex-shrink: 0;
+        }
+
+        .logo h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .logo .time {
+            color: #000000;
+        }
+
+        .logo .age {
+            color: #666666;
+        }
+
+        .logo .tagline {
+            color: #888888;
+            font-size: 0.9rem;
+            margin-top: 2px;
+            font-weight: 400;
+        }
+
+        /* Navigation */
+        .nav-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            justify-content: flex-end;
+        }
+
+        .nav-item {
+            padding: 8px 16px;
+            background: #ffffff;
+            border: 2px solid #e9ecef;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            color: #555555;
+            text-decoration: none;
+            font-size: 0.85rem;
+            white-space: nowrap;
+        }
+
+        .nav-item:hover {
+            background: #f8f9fa;
+            border-color: #001f3f;
+        }
+
+        .nav-item.active {
+            background: #001f3f;
+            color: #ffffff;
+            border-color: #001f3f;
+        }
+
+        /* Main Content */
+        main {
+            padding: 25px 0;
+            min-height: calc(100vh - 150px);
+        }
+
+        .tool-title {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .tool-title h2 {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+            color: #001f3f;
+            font-weight: 700;
+        }
+
+        .tool-title p {
+            color: #666666;
+            font-size: 1rem;
+            font-weight: 400;
+        }
+
+        /* Calculator Styles */
+        .calculator {
+            max-width: 500px;
+            margin: 0 auto;
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .input-group {
+            margin-bottom: 18px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #444444;
+            font-size: 0.9rem;
+        }
+
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 12px 14px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .input-group input:focus, .input-group select:focus {
+            outline: none;
+            border-color: #001f3f;
+            box-shadow: 0 0 0 3px rgba(0, 31, 63, 0.1);
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+        }
+
+        .checkbox-group label {
+            margin-bottom: 0;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .calculate-btn {
+            width: 100%;
+            padding: 14px;
+            background: #001f3f;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .calculate-btn:hover {
+            background: #003366;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 10px;
+            border-left: 4px solid #001f3f;
+            display: none;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+
+        .result.active {
+            display: block;
+            animation: slideIn 0.4s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result h3 {
+            color: #001f3f;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .result p {
+            font-size: 1.1rem;
+            color: #333333;
+            font-weight: 500;
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        footer {
+            background: #f8f9fa;
+            padding: 25px 0;
+            text-align: center;
+            border-top: 1px solid #e9ecef;
+            margin-top: 40px;
+        }
+
+        .footer-content {
+            color: #666666;
+            line-height: 1.6;
+            font-size: 0.9rem;
+        }
+
+        .footer-content p:first-child {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .logo h1 {
+                font-size: 2rem;
+            }
+
+            .nav-container {
+                justify-content: center;
+            }
+
+            .nav-item {
+                padding: 6px 12px;
+                font-size: 0.8rem;
+            }
+
+            .calculator {
+                padding: 20px;
+                margin: 0 10px;
+            }
+
+            .tool-title h2 {
+                font-size: 1.5rem;
+            }
+
+            .tool-title p {
+                font-size: 0.95rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo h1 {
+                font-size: 1.8rem;
+            }
+
+            .logo .tagline {
+                font-size: 0.85rem;
+            }
+
+            .nav-item {
+                padding: 5px 10px;
+                font-size: 0.75rem;
+            }
+
+            .calculator {
+                padding: 15px;
+            }
+
+            .tool-title h2 {
+                font-size: 1.4rem;
+            }
+
+            .tool-title p {
+                font-size: 0.9rem;
+            }
+
+            .result {
+                padding: 15px;
+            }
+
+            .result p {
+                font-size: 1rem;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .logo h1 {
+                font-size: 1.6rem;
+            }
+
+            .nav-container {
+                gap: 4px;
+            }
+
+            .nav-item {
+                padding: 4px 8px;
+                font-size: 0.7rem;
+            }
+
+            .calculator {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <h1><span class="time">Time</span><span class="age">Aged</span></h1>
+                    <div class="tagline">Smart Time & Age Calculators</div>
+                </div>
+                <div class="nav-container">
+                    <a href="index.html" class="nav-item">Age Calculator</a>
+                    <a href="date-calculator.html" class="nav-item active">Date Calculator</a>
+                    <a href="difference.html" class="nav-item">Difference</a>
+                    <a href="countdown.html" class="nav-item">Countdown</a>
+                    <a href="timezone-converter.html" class="nav-item">Time Zone Converter</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="tool-title">
+                <h2>Date Calculator</h2>
+                <p>Calculate dates by adding or subtracting time</p>
+            </div>
+            <div class="calculator">
+                <div class="checkbox-group">
+                    <input type="checkbox" id="use-today" checked onchange="toggleStartDate()">
+                    <label for="use-today">Calculate from today</label>
+                </div>
+                <div class="input-group" id="custom-date-group" style="display: none;">
+                    <label for="base-date">Start Date:</label>
+                    <input type="date" id="base-date">
+                </div>
+                <div class="input-group">
+                    <label for="add-subtract">Operation:</label>
+                    <select id="add-subtract">
+                        <option value="add">Add</option>
+                        <option value="subtract">Subtract</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label for="quantity">Quantity:</label>
+                    <input type="number" id="quantity" min="1" value="1">
+                </div>
+                <div class="input-group">
+                    <label for="time-unit">Unit:</label>
+                    <select id="time-unit">
+                        <option value="days">Days</option>
+                        <option value="weeks">Weeks</option>
+                        <option value="months">Months</option>
+                        <option value="years">Years</option>
+                    </select>
+                </div>
+                <button class="calculate-btn" onclick="calculateNewDate()">Calculate New Date</button>
+                <div id="date-result" class="result">
+                    <h3>Result Date:</h3>
+                    <p id="date-output"></p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2024 TimeAged. All rights reserved.</p>
+                <p>Smart time and age calculation tools for everyone.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('base-date').value = today;
+        });
+
+        function toggleStartDate() {
+            const useToday = document.getElementById('use-today').checked;
+            const customDateGroup = document.getElementById('custom-date-group');
+            
+            if (useToday) {
+                customDateGroup.style.display = 'none';
+            } else {
+                customDateGroup.style.display = 'block';
+            }
+        }
+
+        function calculateNewDate() {
+            const useToday = document.getElementById('use-today').checked;
+            let baseDate;
+            
+            if (useToday) {
+                baseDate = new Date();
+            } else {
+                baseDate = new Date(document.getElementById('base-date').value);
+            }
+            
+            const operation = document.getElementById('add-subtract').value;
+            const quantity = parseInt(document.getElementById('quantity').value);
+            const unit = document.getElementById('time-unit').value;
+            
+            if (!useToday && !baseDate.getTime()) {
+                alert('Please enter a start date');
+                return;
+            }
+            
+            if (!quantity || quantity < 1) {
+                alert('Please enter a valid quantity');
+                return;
+            }
+            
+            const resultDate = new Date(baseDate);
+            const multiplier = operation === 'add' ? 1 : -1;
+            
+            switch(unit) {
+                case 'days':
+                    resultDate.setDate(resultDate.getDate() + (quantity * multiplier));
+                    break;
+                case 'weeks':
+                    resultDate.setDate(resultDate.getDate() + (quantity * 7 * multiplier));
+                    break;
+                case 'months':
+                    resultDate.setMonth(resultDate.getMonth() + (quantity * multiplier));
+                    break;
+                case 'years':
+                    resultDate.setFullYear(resultDate.getFullYear() + (quantity * multiplier));
+                    break;
+            }
+            
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const resultText = resultDate.toLocaleDateString('en-US', options);
+            
+            document.getElementById('date-output').textContent = resultText;
+            document.getElementById('date-result').classList.add('active');
+        }
+    </script>
+</body>
+</html>
