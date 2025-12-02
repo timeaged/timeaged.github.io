@@ -34,68 +34,12 @@
             background-color: #ffffff;
             color: #333333;
             line-height: 1.6;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-
-        .page-wrapper {
-            display: flex;
-            flex: 1;
-            max-width: 1400px;
-            margin: 0 auto;
-            width: 100%;
-        }
-
-        .ad-container {
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            padding: 20px 10px;
-        }
-
-        .left-ad {
-            width: 160px;
-            flex-shrink: 0;
-        }
-
-        .right-ad {
-            width: 300px;
-            flex-shrink: 0;
-        }
-
-        .main-content {
-            flex: 1;
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
-        }
-
-        /* Native Banner Styles */
-        .native-banner {
-            margin: 30px auto 20px;
-            max-width: 728px;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            min-height: 90px;
-        }
-
-        /* Horizontal Banner Styles */
-        .horizontal-banner {
-            margin: 25px auto;
-            max-width: 320px;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            min-height: 50px;
         }
 
         /* Header Styles */
@@ -174,7 +118,7 @@
         /* Main Content */
         main {
             padding: 25px 0;
-            flex: 1;
+            min-height: calc(100vh - 150px);
         }
 
         .tool-title {
@@ -305,23 +249,6 @@
         }
 
         /* Responsive Design */
-        @media (max-width: 1200px) {
-            .page-wrapper {
-                flex-direction: column;
-            }
-            
-            .ad-container {
-                display: flex;
-                justify-content: center;
-                gap: 20px;
-                padding: 10px 0;
-            }
-            
-            .left-ad, .right-ad {
-                width: auto;
-            }
-        }
-
         @media (max-width: 768px) {
             .header-content {
                 flex-direction: column;
@@ -353,20 +280,6 @@
 
             .tool-title p {
                 font-size: 0.95rem;
-            }
-            
-            .ad-container {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .native-banner {
-                margin: 25px auto 15px;
-                min-height: 50px;
-            }
-
-            .horizontal-banner {
-                margin: 20px auto;
             }
         }
 
@@ -406,14 +319,6 @@
 
             .container {
                 padding: 0 15px;
-            }
-            
-            .native-banner {
-                margin: 20px auto 10px;
-            }
-
-            .horizontal-banner {
-                margin: 15px auto;
             }
         }
 
@@ -456,90 +361,38 @@
         </div>
     </header>
 
-    <div class="page-wrapper">
-        <!-- Left Side Banner Ad (160x300) -->
-        <div class="left-ad ad-container">
-            <script type="text/javascript">
-                atOptions = {
-                    'key' : '1b8ba0232e16899479bf40fe2a2444e0',
-                    'format' : 'iframe',
-                    'height' : 300,
-                    'width' : 160,
-                    'params' : {}
-                };
-            </script>
-            <script type="text/javascript" src="//www.highperformanceformat.com/1b8ba0232e16899479bf40fe2a2444e0/invoke.js"></script>
-        </div>
-
-        <div class="main-content">
-            <!-- Horizontal Banner (320x50) -->
-            <div class="horizontal-banner">
-                <script type="text/javascript">
-                    atOptions = {
-                        'key' : '8cf89e23cf33961362c6a572099d40ca',
-                        'format' : 'iframe',
-                        'height' : 50,
-                        'width' : 320,
-                        'params' : {}
-                    };
-                </script>
-                <script type="text/javascript" src="//www.highperformanceformat.com/8cf89e23cf33961362c6a572099d40ca/invoke.js"></script>
+    <main>
+        <div class="container">
+            <div class="tool-title">
+                <h2>Age Calculator</h2>
+                <p>Calculate your exact age in years, months, and days</p>
             </div>
-
-            <main>
-                <div class="container">
-                    <div class="tool-title">
-                        <h2>Age Calculator</h2>
-                        <p>Calculate your exact age in years, months, and days</p>
-                    </div>
-                    <div class="calculator">
-                        <div class="input-group">
-                            <label for="birth-date">Birth Date:</label>
-                            <input type="date" id="birth-date" max="">
-                        </div>
-                        <div class="input-group">
-                            <label for="age-at-date">Age at Date (Optional):</label>
-                            <input type="date" id="age-at-date">
-                        </div>
-                        <button class="calculate-btn" onclick="calculateAge()">Calculate Age</button>
-                        <div id="age-result" class="result">
-                            <h3>Your Age:</h3>
-                            <p id="age-output"></p>
-                        </div>
-                    </div>
-                    
-                    <!-- Native Banner -->
-                    <div class="native-banner">
-                        <script async="async" data-cfasync="false" src="//pl28095844.effectivegatecpm.com/7f602a9bb26d6d08876dc8fc9fcb5639/invoke.js"></script>
-                        <div id="container-7f602a9bb26d6d08876dc8fc9fcb5639"></div>
-                    </div>
+            <div class="calculator">
+                <div class="input-group">
+                    <label for="birth-date">Birth Date:</label>
+                    <input type="date" id="birth-date" max="">
                 </div>
-            </main>
-
-            <footer>
-                <div class="container">
-                    <div class="footer-content">
-                        <p>&copy; 2024 TimeAged. All rights reserved.</p>
-                        <p>Smart time and age calculation tools for everyone.</p>
-                    </div>
+                <div class="input-group">
+                    <label for="age-at-date">Age at Date (Optional):</label>
+                    <input type="date" id="age-at-date">
                 </div>
-            </footer>
+                <button class="calculate-btn" onclick="calculateAge()">Calculate Age</button>
+                <div id="age-result" class="result">
+                    <h3>Your Age:</h3>
+                    <p id="age-output"></p>
+                </div>
+            </div>
         </div>
+    </main>
 
-        <!-- Right Side Banner Ad (300x250) -->
-        <div class="right-ad ad-container">
-            <script type="text/javascript">
-                atOptions = {
-                    'key' : 'a9709ca58594b562be72305ab27de09e',
-                    'format' : 'iframe',
-                    'height' : 250,
-                    'width' : 300,
-                    'params' : {}
-                };
-            </script>
-            <script type="text/javascript" src="//www.highperformanceformat.com/a9709ca58594b562be72305ab27de09e/invoke.js"></script>
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2024 TimeAged. All rights reserved.</p>
+                <p>Smart time and age calculation tools for everyone.</p>
+            </div>
         </div>
-    </div>
+    </footer>
 
     <script>
         // Set max date for date inputs to today
